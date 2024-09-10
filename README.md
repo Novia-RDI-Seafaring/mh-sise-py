@@ -37,7 +37,6 @@ Where:
 - $L(u)$ is a quadratic regularization term with respect to $u$ and sohuld be on the form on the form $L(u) = u^TQ_u u^T + c^Tu$, where $Q_u \in \mathbb{R}^{m \times m}$ is a symmetric positive semidefinite matrix (ensuring convexity) and $c \in \mathbb{R}^m$ is a vector.
 - $G \in \mathbb{R}^{r \times n}$.
 - $c \in \mathbb{R}^{r}$
-- $\mathcal{C}$ is a convex set.
 
 This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for efficient evaluation is handled by `cvxpygen`.
 
