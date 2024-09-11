@@ -1,1 +1,8 @@
 __pycache__
+# Ignore everything in the codegen directory
+codegen/*
+
+# Except the codegen/example directory
+!codegen/example/
+
+*.pyd
