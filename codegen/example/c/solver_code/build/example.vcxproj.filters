@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Mikael\Documents\GitHub\Novia-RDI-Seafaring\mh-sise-py\codegen\example\c\solver_code\src\example.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Mikael\Documents\GitHub\Novia-RDI-Seafaring\mh-sise-py\codegen\example\c\solver_code\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{67970A7F-DAEC-3897-93F3-8D79129A8E7D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
