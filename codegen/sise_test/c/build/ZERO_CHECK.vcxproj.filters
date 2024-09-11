@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Mikael\Documents\GitHub\Novia-RDI-Seafaring\mh-sise-py\codegen\sise_test\c\build\CMakeFiles\ce82c4ac38b24c6c684ba6186d09ae26\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{D5627BC7-E45D-33CE-9DE7-9B3371E83A4C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
