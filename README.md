@@ -7,10 +7,10 @@ This repository implements **Moving-Horizon Simultaneous Input-and-State Estimat
 We considCer a discrete-time linear time-invariant (LTI) system of the form:
 
 $$
-\begin{align}
+\begin{align*}
 x_{k+1} &= Ax_k + Bu_k + w_k \\
 y_k &= Cx_k + v_k
-\end{align}
+\end{align*}
 $$
 
 Where:
@@ -85,3 +85,6 @@ pip install -r requirements.txt
     - CRediT: *Methodology*, *Calidation*. 
 - **Jan Kronqvist** (KTH).
     - CRediT: *Supervision*. 
+
+## Acknowledgements
+This work was done as part of the Business Finland funded project [Virtual Sea Trial](https://virtualseatrial.fi).
