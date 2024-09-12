@@ -64,3 +64,43 @@ def lumped_mass_ss(N_MASSES, I, K, C, D, sensor_loc):
     Dmat = np.zeros([2,2])
 
     return Amat, Bmat, Cmat, Dmat
+
+def second_difference_matrix(n, m):
+    '''
+    n: number of data points
+    m: number of inputs to system
+    '''
+    D2 = np.eye(n*m) - 2*np.eye(n*m, k=2) + np.eye(n*m, k=4)
+    # delete incomplete rows
+    D2 = D2[:-2*m, :]
+
+    return D2
+
+def get_sparsity(matrix):
+    """
+    Finds the indices of non-zero elements in a given matrix.
+
+    Parameters:
+    ----------
+    matrix : numpy.ndarray
+        A 2D numpy array (dense representation) where non-zero elements are to be identified.
+
+    Returns:
+    -------
+    list of tuple
+        A list of tuples where each tuple represents the (row, column) index of a non-zero element.
+    
+    Example:
+    -------
+    >>> matrix = np.array([[1, 2, 0],
+    ...                    [0, 3, 0]])
+    >>> find_nonzero_indices(matrix)
+    [(0, 0), (0, 1), (1, 1)]
+    """
+    # Get the indices of non-zero elements
+    rows, cols = np.nonzero(matrix)
+    
+    # Combine row and column indices into a list of tuples
+    nonzero_indices = list(zip(rows, cols))
+    
+    return nonzero_indices
