@@ -1,0 +1,6 @@
+numpy==1.26.4
+cvxpy==1.5.3
+cvxpygen==0.3.5
+matplotlib==3.9.2
+scipy==1.11.4
+ipykernel==6.29.5

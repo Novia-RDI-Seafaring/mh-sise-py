@@ -41,14 +41,38 @@ where:
 
 This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for efficient evaluation is handled by `cvxpygen`.
 
-## Example
+## Examples
+- [MH-SISE](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example.ipynb)
+- [MH-SISE Trend Filtering]()
 
-## Requirements
-- `cvxpy`
-- `cvxpygen`
-- `numpy`
+## Installation
+### Python version
+This project is developed ``Python 3.12.4`` and have not been tested for other versions.
 
-You can install the required packages with the following command:
+### Install MH-SISE
+Clone repository and install `mh_sise`  in **editable** mode using:
 
 ```bash
-pip install cvxpy cvxpygen numpy
+pip install -e .
+```
+
+This will install the package and allow you to modify the code without needing to reinstall it. Now you can import `mh_sise` in your Python projects:
+
+```python
+from mh_sise import model_utils
+```
+### Requirementes
+To run the code in this project, you'll need to install the following Python packages:
+
+- `numpy` for numerical operations.
+- `cvxpy` for convex optimization.
+- `cvxpygen` for code ceneration.
+- `scipy` for linear algebra and control-related oprations.
+- `matplotlib` for plotting and visualization.
+
+Install the dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
