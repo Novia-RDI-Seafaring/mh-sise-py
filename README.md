@@ -46,7 +46,7 @@ This formulation leads to a convex optimization problem, which is solved using t
 
 ## Installation
 ### Python version
-This project is developed ``Python 3.12.4`` and have not been tested for other versions.
+This project is developed ``Python 3.12.4`` and has not been tested for other versions.
 
 ### Install MH-SISE
 Clone repository and install `mh_sise`  in **editable** mode using:
@@ -75,3 +75,13 @@ Install the dependencies with:
 pip install -r requirements.txt
 ```
 
+
+## Main contributors
+- **Mikael Manngård**, (Novia UAS). Contributed with the MH-SISE formulation.
+    - CRediT: *Conceptualization*, *Methodology*, *Software*, *Formal analysis*, *Supervision*. 
+- **Dimitrios Bouzoulas** (Novia UAS). Contributed with the code-generation work with `cvxpygen`.
+    - CRediT: *Software*, *Validation*.
+- **Urho Hakonen** (Aalto University). This work is a continuation of his previous work ([Hakonen, 2023](https://www.finna.fi/Record/aaltodoc.123456789_123180?sid=3456825094&lng=en-gb)).
+    - CRediT: *Methodology*, *Calidation*. 
+- **Jan Kronqvist** (KTH).
+    - CRediT: *Supervision*. 
