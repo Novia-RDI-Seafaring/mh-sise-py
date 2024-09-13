@@ -1,0 +1,25 @@
+\begin{table*}[t!]
+\centering
+\caption{Performance results for the problem formulation \texttt{<<PROBLEM_FORMULATION_NAME>>}.}
+\begin{tabularx}{\textwidth}{lXXX}
+\hline
+ & Small ($n=<<n_states>>$, $N=<<HORIZON_LENGTH>>$) & Medium ($n=<<n_states>>$, $N=<<HORIZON_LENGTH>>$) & Large ($n=<<n_states>>$, $N=<<HORIZON_LENGTH>>$) \\
+\hline
+Model &\texttt{lumped\_element\_2} &\texttt{lumped\_element\_4} &\texttt{lumped\_element\_8} \\
+Dataset &\texttt{data\_lumped\_element\_2} &\texttt{data\_lumped\_element\_4} &\texttt{data\_lumped\_element\_8} \\
+CVX and SeDuMi                      & <<time_cvx_s>> ms     & <<time_cvx_m>> ms         & <<time_cvx_l>> ms \\
+Scalar parameters                   & <<pars_s>>            & <<pars_m>>                & <<pars_l>> \\
+Variables, original                 & <<vars_s>>            & <<vars_m>>                & <<vars_l>> \\
+Variables, transformed              & <<tvars_s>>           & <<tvars_m>>               & <<tvars_l>> \\
+Equalities, transformed             & <<teq_s>>             & <<teq_m>>                 & <<teq_l>> \\
+Inequalities, transformed           & <<tieq_s>>            & <<tieq_m>>                & <<tieq_l>> \\
+Code size                           & <<code_size_s>> kB    & <<code_size_m>> kB        & <<code_size_k>> kB \\
+Generation time                     & <<gen_time_s>> s      & <<gen_time_m>> s          & <<gen_time_k>> s \\
+Compilation time                    & <<comp_time_s>> s     & <<comp_time_m>> s         & <<comp_time_k>> s \\
+Binary size                         & <<binary_size_s>> kB  & <<binary_size_m>> kB      &<<binary_size_l>> kB \\
+CVXGEN time                         & <<time_cvxgen_s>> s   & <<time_cvxgen_m>> s       &<<binary_size_l>> s \\
+Maximum iterations required, 99.9\% & <<maxit_s>>           & <<maxit_m>>               & <<maxit_l>> \\
+Maximum iterations required, all    & <<maxit_s>>           & <<maxit_m>>               & <<maxit_l>> \\
+\hline
+\end{tabularx}
+\end{table*}

@@ -4,7 +4,7 @@ This repository implements **Moving-Horizon Simultaneous Input-and-State Estimat
 
 ## Method
 
-We considCer a discrete-time linear time-invariant (LTI) system of the form:
+We consider a discrete-time linear time-invariant (LTI) system of the form:
 
 $$
 \begin{align*}
