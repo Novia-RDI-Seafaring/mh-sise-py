@@ -24,7 +24,7 @@ To estimate both the states $x_k$ and the inputs $u_k$ over a moving horizon of 
 
 $$
 \begin{aligned}
-    &\underset{x, u}{\mathrm{minimize}} \quad \sum_{n=k-N}^{k} u_n^T Q_u^{-1} u_n + \sum_{n=k-N}^{k} v_n^T Q_v^{-1} v_n + \sum_{n=k-N}^{k} w_n^T Q_w^{-1} w_n \\
+    &\underset{x, u}{\mathrm{minimize}} \quad u^T R u + \sum_{n=k-N}^{k} v_n^T Q_v^{-1} v_n + \sum_{n=k-N}^{k} w_n^T Q_w^{-1} w_n \\
     &\text{subject to} \\
     &x_{n} = A x_{n-1} + B u_{n-1} + w_n, &n = k-N, \dots, k \\
     &y_n = C x_n + v_n, &n = k-N, \dots, k \\
@@ -34,7 +34,8 @@ $$
 $$
 
 where:
-- $Q_v \in \mathbb{R}^{p \times p}$, $Q_w \in \mathbb{R}^{n \times n}, Q_u \in \mathbb{R}^{m \times m}$ are weighting matrices representing the covariande matrices of measurement noise $v_n$, process noise $w_n$, and inputs respectively.
+- $Q_v \in \mathbb{R}^{p \times p}$, $Q_w \in \mathbb{R}^{n \times n} arecovariande matrices of measurement noise $v_n$, process noise $w_n$, and inputs respectively.
+- $R \in \mathbb{R}^{Nm}$ is a design matrix used to app degularization on $u$.
 - $\mathcal{C}$ is a convex set.
 - $\hat{x}_{k-N-1}$ is an estimatie of the initial state.
 
@@ -81,8 +82,8 @@ pip install -r requirements.txt
     - CRediT: *Conceptualization*, *Methodology*, *Software*, *Formal analysis*, *Supervision*. 
 - **Dimitrios Bouzoulas** (Novia UAS). Contributed with the code-generation work with `cvxpygen`.
     - CRediT: *Software*, *Validation*.
-- **Urho Hakonen** (Aalto University). This work is a continuation of his previous work ([Hakonen, 2023](https://www.finna.fi/Record/aaltodoc.123456789_123180?sid=3456825094&lng=en-gb)).
-    - CRediT: *Methodology*, *Calidation*. 
+- **Urho Hakonen** (Aalto University). This work is a continuation and implementation of ([Hakonen, 2023](https://www.finna.fi/Record/aaltodoc.123456789_123180?sid=3456825094&lng=en-gb)).
+    - CRediT: *Methodology*, *Validation*. 
 - **Jan Kronqvist** (KTH).
     - CRediT: *Supervision*. 
 

@@ -1,6 +1,6 @@
 ^C:\USERS\MIKAEL\DOCUMENTS\GITHUB\NOVIA-RDI-SEAFARING\MH-SISE-PY\CODEGEN\EXAMPLE\C\CMAKELISTS.TXT
 setlocal
-C:\Users\Mikael\miniconda3\envs\cvxgen-env\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c -BC:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c/build --check-stamp-file C:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c/build/CMakeFiles/generate.stamp
+C:\Users\Mikael\miniconda3\envs\mh-sise-env\Lib\site-packages\cmake\data\bin\cmake.exe -SC:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c -BC:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c/build --check-stamp-file C:/Users/Mikael/Documents/GitHub/Novia-RDI-Seafaring/mh-sise-py/codegen/example/c/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
