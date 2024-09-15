@@ -51,8 +51,7 @@ class Problem:
         self.constraints = [
             self.W[:, 0] == self.X[:, 0] - self.x0,
             self.W[:, 1:] == self.X[:, 1:self.HORIZON_LENGTH] - self.A @ self.X[:, 0:self.HORIZON_LENGTH - 1] - self.B @ self.U,
-            self.V[:, :self.HORIZON_LENGTH] == self.y[:, :self.HORIZON_LENGTH] - self.C @ self.X[:, :self.HORIZON_LENGTH],
-            cp.abs(self.U) <= 1
+            self.V[:, :self.HORIZON_LENGTH] == self.y[:, :self.HORIZON_LENGTH] - self.C @ self.X[:, :self.HORIZON_LENGTH]
         ]
     
     def create_problem(self):
@@ -89,6 +88,18 @@ class Problem:
     def generate_code(self, pth, fnm):
         # compiles code with cvxgen
         cpg.generate_code(self.problem, code_dir=f'{pth}{fnm}')
+    
+    def add_constraints(self, new_constraints):
+        """Add additional constraints to the problem."""
+        if isinstance(new_constraints, list):
+            # If the input is a list of constraints, extend the existing constraints
+            self.constraints.extend(new_constraints)
+        else:
+            # Otherwise, append a single constraint
+            self.constraints.append(new_constraints)
+        
+        # Recreate the problem with the updated constraints
+        self.create_problem()
 
 class CProblem:
     def __init__(self, pth):
