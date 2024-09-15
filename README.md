@@ -42,8 +42,74 @@ where:
 This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for efficient evaluation is handled by `cvxpygen`.
 
 ## Examples
-- [MH-SISE](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example.ipynb)
-- [MH-SISE Trend Filtering]()
+Define a generic MH-SISE problem for a system with $m$ inputs, $n$ states, and $p$ outputs. Estimation happens on a moving horizon with length $N$.
+
+### Create the optimization problem
+```python
+from mh_sise.problem import Problem
+
+p = n_outputs
+m = n_inputs
+n = n_states
+
+problem = Problem(n, m, p, N)
+```
+
+#### Assign parameter values
+
+```python
+problem.assign_parameter_values(
+    Q_v_inv_sqrt = Q_v_inv_sqrt,
+    Q_w_inv_sqrt = Q_w_inv_sqrt,
+    Q_u_inv_sqrt = Q_u_inv_sqrt,
+    A = A,
+    B = B,
+    C = C,
+    x0 = x0,
+    y = y
+)
+```
+#### Solve the problem with CVXPY
+```python
+problem.solve()
+```
+### Generate and use C-solver code
+Here we will step through how to generate C code using `CVXPYGEN` por a problem created as above, load the C solver into Python and solve it. 
+
+#### Generate C code with CVXPYGEN
+```python
+problem.generate_code(pth, name)
+```
+where `pth` is the parth to where to save the solver, and `name` is the name you want to give the solver.
+
+#### Load C-solver code in Python
+```python
+from mh_sise.problem import CProblem
+from codegen.<<pth_to_solver>>.cpg_solver import cpg_solve
+
+cproblem = CProblem(pth=pth_to_solver)
+```
+
+#### Assign parameter values
+```python
+cproblem.assign_parameter_values(
+    Q_v_inv_sqrt = Q_v_inv_sqrt,
+    Q_w_inv_sqrt = Q_w_inv_sqrt,
+    Q_u_inv_sqrt = Q_u_inv_sqrt,
+    A = A,
+    B = B,
+    C = C,
+    x0 = x0,
+    y = y
+)
+```
+#### Solve the problem with the C-solver
+```python
+cproblem.solve(cpg_solve)
+```
+---
+A complete example is provided in:
+- MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example.ipynb)
 
 ## Installation
 ### Python version
