@@ -146,7 +146,7 @@ cproblem.solve(cpg_solve)
 ```
 ---
 A complete example is provided in:
-- MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example.ipynb)
+- MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example_cart.ipynb)
 
 ## Main contributors
 - **Mikael Manngård**, (Novia UAS). Contributed with the MH-SISE formulation.
