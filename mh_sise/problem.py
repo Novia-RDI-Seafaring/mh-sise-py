@@ -66,7 +66,6 @@ class Problem:
                 getattr(self, param_name).value = param_value
             else:
                 raise AttributeError(f"Parameter '{param_name}' does not exist in the Problem class.")
-        self.update_problem()
     
     def get_variable_values(self):
         # Retrieve the values of all decision variables in the problem's variable dictionary
