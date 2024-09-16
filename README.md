@@ -4,7 +4,7 @@ This repository implements a **Moving-Horizon Simultaneous Input-and-State Estim
 
 A [DPP-complient](https://www.cvxpy.org/tutorial/dpp/index.html) optimization problem is defined using `CVXPY`. For real-time applications, the package can generate a high-speed C-solver using `CVXPYGEN`. 
 
-# Methodology
+# Method
 We consider a discrete-time linear time-invariant (LTI) system of the form:
 
 $$
