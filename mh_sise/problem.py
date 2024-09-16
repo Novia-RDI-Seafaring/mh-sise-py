@@ -25,14 +25,29 @@ class Problem:
     def create_parameters(self):
         '''Creates the parameters'''
         # Define the parameters
-        self.Q_v_inv_sqrt = cp.Parameter(self.p, name='Q_v_inv_sqrt')
-        self.Q_w_inv_sqrt = cp.Parameter((self.n, self.n), name='Q_w_inv_sqrt')
+        if self.p == 1:
+            self.Q_v_inv_sqrt = cp.Parameter(self.p, name='Q_v_inv_sqrt')
+        else:
+            self.Q_v_inv_sqrt = cp.Parameter((self.p,self.p), name='Q_v_inv_sqrt')
+        if self.n == 1:
+            self.Q_w_inv_sqrt = cp.Parameter((self.n, self.n), name='Q_w_inv_sqrt')
+            self.A = cp.Parameter(self.n, name='A')
+        else:
+            self.Q_w_inv_sqrt = cp.Parameter((self.n, self.n), name='Q_w_inv_sqrt')
+            self.A = cp.Parameter((self.n, self.n), name='A')
+        if self.n == 1 and self.p == 1:
+            self.C = cp.Parameter(1, name='C')
+        else:
+            self.C = cp.Parameter((self.p, self.n), name='C')
+        if self.n == 1 and self.m == 1:
+            self.B = cp.Parameter(1, name='B')
+        else:
+            self.B = cp.Parameter((self.n, self.m), name='B')
         self.y = cp.Parameter((self.p, self.HORIZON_LENGTH), name='y')
         self.x0 = cp.Parameter(self.n, name='x0')
         self.u0 = cp.Parameter(self.n, name='u0')
-        self.A = cp.Parameter((self.n, self.n), name='A')
-        self.B = cp.Parameter((self.n, self.m), name='B')
-        self.C = cp.Parameter((self.p, self.n), name='C')
+        
+        
    
     def create_variables(self):
         '''Creates the variables'''
