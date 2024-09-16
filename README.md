@@ -1,4 +1,4 @@
-# **MH-SISE-PY**: A Python Package for Moving-Horizon Simultaneous Input-and-State Estimation
+![mh-sise-py](media/mhsise.svg)
 
 This repository implements a **Moving-Horizon Simultaneous Input-and-State Estimation** (MH-SISE) problem in Python. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon. 
 
