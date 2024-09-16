@@ -207,7 +207,7 @@ If you use this package in your research, please cite it using the following Bib
 ```bibtex
 @misc{mh-sise-py,
   author = {Mikael Manngård, Dimitrios Bouzoulas, Urho Hakonen, Jan Kronqvist},
-  title = {MH-SISE-PY: A Moving-horizon simultaneous input-and-state estimation Python package},
+  title = {MH-SISE-PY: A moving-horizon simultaneous input-and-state estimation python package},
   year = {2024},
   howpublished = {\url{https://github.com/Novia-RDI-Seafaring/mh-sise-py}},
 }
