@@ -11,6 +11,9 @@ class Problem:
         self.m = m
         self.p = p
         self.HORIZON_LENGTH = HORIZON_LENGTH
+
+        # initialize regularization
+        self.L = 0
         
         # Define parameters, variables, objective, and constraints
         self.create_parameters()
@@ -20,10 +23,10 @@ class Problem:
         self.create_problem()
     
     def create_parameters(self):
+        '''Creates the parameters'''
         # Define the parameters
         self.Q_v_inv_sqrt = cp.Parameter(self.p, name='Q_v_inv_sqrt')
         self.Q_w_inv_sqrt = cp.Parameter((self.n, self.n), name='Q_w_inv_sqrt')
-        self.Q_u_inv_sqrt = cp.Parameter(self.m, name='Q_u_inv_sqrt')
         self.y = cp.Parameter((self.p, self.HORIZON_LENGTH), name='y')
         self.x0 = cp.Parameter(self.n, name='x0')
         self.u0 = cp.Parameter(self.n, name='u0')
@@ -32,6 +35,7 @@ class Problem:
         self.C = cp.Parameter((self.p, self.n), name='C')
    
     def create_variables(self):
+        '''Creates the variables'''
         # Define the variables
         self.X = cp.Variable((self.n, self.HORIZON_LENGTH), name='X')
         self.U = cp.Variable((self.m, self.HORIZON_LENGTH - 1), name='U')
@@ -39,22 +43,55 @@ class Problem:
         self.W = cp.Variable((self.n, self.HORIZON_LENGTH), name='W')
 
     def create_objective(self):
+        '''Creates the objective function'''
         # Define the objective function based on variables and parameters
         self.objective = cp.Minimize(
+            self.L +
             cp.sum_squares(self.Q_w_inv_sqrt @ self.W) +
-            cp.sum_squares(self.Q_v_inv_sqrt @ self.V) +
-            cp.sum_squares(self.Q_u_inv_sqrt @ self.U)
-        )
-    
+            cp.sum_squares(self.Q_v_inv_sqrt @ self.V)
+            )
+
     def create_constraints(self):
+        '''Creates the constraints'''
         # Define the constraints
         self.constraints = [
             self.W[:, 0] == self.X[:, 0] - self.x0,
             self.W[:, 1:] == self.X[:, 1:self.HORIZON_LENGTH] - self.A @ self.X[:, 0:self.HORIZON_LENGTH - 1] - self.B @ self.U,
             self.V[:, :self.HORIZON_LENGTH] == self.y[:, :self.HORIZON_LENGTH] - self.C @ self.X[:, :self.HORIZON_LENGTH]
         ]
+
+    def add_regularization(self, expression):
+        '''Defines the regularization function'''
+        self.L = expression
+        # update objective function
+        self.create_objective()
     
+    def add_constraints(self, new_constraints):
+        """Add additional constraints to the problem."""
+        if isinstance(new_constraints, list):
+            # If the input is a list of constraints, extend the existing constraints
+            self.constraints.extend(new_constraints)
+        else:
+            # Otherwise, append a single constraint
+            self.constraints.append(new_constraints)
+        
+        # Recreate the problem with the updated constraints
+        self.create_problem()
+    
+    def add_parameter(self, name, shape):
+        """Add additional parameter to the problem."""
+        new_par = cp.Parameter(shape, name=name)
+        # Add the new parameter as an attribute of the class
+        setattr(self, name, new_par)
+    
+    def add_variable(self, name, shape):
+        """Add additional parameter to the problem."""
+        new_var = cp.Parameter(shape, name=name)
+        # Add the new variable as an attribute of the class
+        setattr(self, name, new_var)
+
     def create_problem(self):
+        '''Create the CVX problem'''
         # Create the optimization problem
         self.problem = cp.Problem(self.objective, self.constraints)
 
@@ -88,18 +125,6 @@ class Problem:
     def generate_code(self, pth, fnm):
         # compiles code with cvxgen
         cpg.generate_code(self.problem, code_dir=f'{pth}{fnm}')
-    
-    def add_constraints(self, new_constraints):
-        """Add additional constraints to the problem."""
-        if isinstance(new_constraints, list):
-            # If the input is a list of constraints, extend the existing constraints
-            self.constraints.extend(new_constraints)
-        else:
-            # Otherwise, append a single constraint
-            self.constraints.append(new_constraints)
-        
-        # Recreate the problem with the updated constraints
-        self.create_problem()
 
 class CProblem:
     def __init__(self, pth):

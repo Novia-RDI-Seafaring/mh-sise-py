@@ -1,7 +1,8 @@
 # Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)
 
-This repository implements **Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)** using the Python packages `cvxpy` and `cvxpygen`. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon, enabling real-time state estimation with optimal accuracy. 
+This repository implements a **Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)** problem using the Python packages. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon. 
 
+A [DPP-complient](https://www.cvxpy.org/tutorial/dpp/index.html) optimization problem is defined using `CVXPY`. For real-time applications, the package can generate a high-speed C-solver using `CVXPYGEN`. 
 ## Method
 
 We consider a discrete-time linear time-invariant (LTI) system of the form:
@@ -20,11 +21,11 @@ Where:
 - $w_k \in \mathbb{R}^n$ and $v_k \in \mathbb{R}^p$ are process and measurement noise, respectively,
 - $A \in \mathbb{R}^{n \times n}$, $B \in \mathbb{R}^{n \times m}$, and $C \in \mathbb{R}^{p \times n}$ are system matrices describing the dynamics and observation model.
 
-To estimate both the states $x_k$ and the inputs $u_k$ over a moving horizon of length $N$, the package solves the following quadratic constrainted optimization problem:
+To estimate both the states $x_k$ and the inputs $u_k$ over a moving horizon of length $N$, the package solves the following quadratic constrainted (QP) optimization problem:
 
 $$
 \begin{aligned}
-    &\underset{x, u}{\mathrm{minimize}} \quad u^T R u + \sum_{n=k-N}^{k} v_n^T Q_v^{-1} v_n + \sum_{n=k-N}^{k} w_n^T Q_w^{-1} w_n \\
+    &\underset{x, u}{\mathrm{minimize}} \quad L(u) + \sum_{n=k-N}^{k} v_n^T Q_v^{-1} v_n + \sum_{n=k-N}^{k} w_n^T Q_w^{-1} w_n \\
     &\text{subject to} \\
     &x_{n} = A x_{n-1} + B u_{n-1} + w_n, &n = k-N, \dots, k \\
     &y_n = C x_n + v_n, &n = k-N, \dots, k \\
@@ -34,18 +35,18 @@ $$
 $$
 
 where:
-- $Q_v \in \mathbb{R}^{p \times p}$, $Q_w \in \mathbb{R}^{n \times n} arecovariande matrices of measurement noise $v_n$, process noise $w_n$, and inputs respectively.
-- $R \in \mathbb{R}^{Nm}$ is a design matrix used to app degularization on $u$.
-- $\mathcal{C}$ is a convex set.
+- $Q_v \in \mathbb{R}^{p \times p}$, $Q_w \in \mathbb{R}^{n \times n}$ are covariande matrices of measurement noise $v_n$, process noise $w_n$, respectively.
+- $L(u)$ is a regularization term designed by the user.
+- $\mathcal{C}$ is a convex set defined by the user.
 - $\hat{x}_{k-N-1}$ is an estimatie of the initial state.
 
-This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for efficient evaluation is handled by `cvxpygen`.
+This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for real-time applications is handled by `cvxpygen`.
 
 ## Installation
-### Python version
+#### Python version
 This project is developed ``Python 3.12.4`` and has not been tested for other versions.
 
-### Install MH-SISE
+#### Install the MH-SISE package
 Clone repository and install `mh_sise`  in **editable** mode using:
 
 ```bash
@@ -57,7 +58,7 @@ This will install the package and allow you to modify the code without needing t
 ```python
 from mh_sise import model_utils
 ```
-### Requirementes
+#### Requirementes
 To run the code in this project, you'll need to install the following Python packages:
 
 - `numpy` for numerical operations.
@@ -73,10 +74,27 @@ pip install -r requirements.txt
 ```
 
 
-## Example
-Define a generic MH-SISE problem for a system with $m$ inputs, $n$ states, and $p$ outputs. Estimation happens on a moving horizon with length $N$.
+# Example usage
+This example outlines the process of creatign and solving an MH-SISE problem. The following example steps through the process of defining an MH-SISE problem for a system with $m$ inputs, $n$ states, and $p$ outputs. Estimation happens on a moving horizon with length $N$.
 
-### Create the optimization problem
+The complete example is provided in:
+- MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example_cart.ipynb)
+
+### Create an optimization problem
+The class `Problem` in the `mh-sise` package creates a DPP-complient optimization problem of the form
+$$
+\begin{aligned}
+    &\underset{X, U, V, W}{\mathrm{minimize}} \quad L(U) + \| Q_v^{-1/2} V \|_F^2 + \| Q_w^{-1/2} W \|_F^2 \\
+    &\text{subject to} \\
+    &X_{:,1:N} = AX_{:,:N-1} + BU \\
+    &Y = CX + V \\
+    &W_{:,1:} = X_{:,1:N} - AX_{:,:N-1} - BU, \\
+    &W_{:,0} = X_{:,0} - \hat{x}_0 \\
+    &U \in \mathcal{C}.
+\end{aligned}
+$$
+The regularization term $L(U)$ and constraints $U \in \mathcal{C}$ are to be defined by the user. The "mother" problem without regularization $L(U)$ and constraints $U \in \mathcal{C}$ is defined as:
+
 ```python
 from mh_sise.problem import Problem
 
@@ -86,9 +104,42 @@ n = n_states
 
 problem = Problem(n, m, p, N)
 ```
+#### Add parameters
+This is how you add additional parameters beyond the ones defined in the "mother" problem above. Here parameters $b\in\mathbb{R}$ and $Q_u^{-1/2} \in \mathbb{R}^{m \times m}$ are added to the problem.
+
+```python
+problem.add_parameter(shape=(m,m), name='Q_u_inv_sqrt')
+problem.add_parameter(shape=1, name='b')
+```
+#### Add regularization
+Here the regularization term $L(U) = \| Q_u^{-1/2} U \|_F
+^2$ is added to the problem.
+```python
+import cvxpy as cp
+
+# create the regularization term
+expression = cp.sum_squares(problem.Q_u_inv_sqrt @ problem.U)
+problem.add_regularization(expression)
+```
+
+#### Add constraints
+This is how you add additional constraints not defined in the mother problem. Here the constraint $|U| \leq b$ is added.
+```python
+# create a constraint
+new_constraint = cp.abs(problem.U) <= problem.b
+
+# add constraint to problem
+problem.add_constraints(new_constraint)
+```
+#### Add variables
+It is sometimes necessary to add additional variables beyond those included in the mother problem. Variables are added as follows:
+
+```python
+problem.add_variable(shape, name)
+```
 
 #### Assign parameter values
-Parameter values are assigned as follows. It is also possible to assign values to a selection of the parameters.
+Parameter values are assigned as follows. It is also possible to assign values to a subset of all parameters.
 
 ```python
 problem.assign_parameter_values(
@@ -99,25 +150,26 @@ problem.assign_parameter_values(
     B = B,
     C = C,
     x0 = x0,
-    y = y
+    y = y,
+    b = b
 )
 ```
 
-
 #### Solve the problem with CVXPY
+Solve the problem with `cvxpy` with the following command: 
 ```python
 problem.solve()
 ```
-### Generate and use C-solver code
-Here we will step through how to generate C code using `CVXPYGEN` por a problem created as above, load the C solver into Python and solve it. 
+### Generate a high-speed C-solver code
+Here we will step through how to generate C code using `CVXPYGEN` for the problem above above.
 
-#### Generate C code with CVXPYGEN
+#### Generate C-code with CVXPYGEN
 ```python
 problem.generate_code(pth, name)
 ```
-where `pth` is the parth to where to save the solver, and `name` is the name you want to give the solver.
+where `pth` is the path to where the solved is to be saved, and `name` is the name you want to give the solver.
 
-#### Load C-solver code in Python
+#### Load the C-solver code in Python
 ```python
 from mh_sise.problem import CProblem
 from codegen.<<pth_to_solver>>.cpg_solver import cpg_solve
@@ -137,7 +189,8 @@ cproblem.assign_parameter_values(
     B = B,
     C = C,
     x0 = x0,
-    y = y
+    y = y,
+    b = b
 )
 ```
 #### Solve the problem with the C-solver
@@ -145,8 +198,6 @@ cproblem.assign_parameter_values(
 cproblem.solve(cpg_solve)
 ```
 ---
-A complete example is provided in:
-- MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example_cart.ipynb)
 
 ## Main contributors
 - **Mikael Manngård**, (Novia UAS). Contributed with the MH-SISE formulation.
