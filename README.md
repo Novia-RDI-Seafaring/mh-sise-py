@@ -3,8 +3,8 @@
 This repository implements a **Moving-Horizon Simultaneous Input-and-State Estimation** (MH-SISE) problem in Python. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon. 
 
 A [DPP-complient](https://www.cvxpy.org/tutorial/dpp/index.html) optimization problem is defined using `CVXPY`. For real-time applications, the package can generate a high-speed C-solver using `CVXPYGEN`. 
-## Method
 
+# Methodology
 We consider a discrete-time linear time-invariant (LTI) system of the form:
 
 $$
@@ -42,11 +42,11 @@ where:
 
 This formulation leads to a convex optimization problem, which is solved using the `cvxpy` optimization framework, and code generation for real-time applications is handled by `cvxpygen`.
 
-## Installation
-#### Python version
+# Installation
+### Python version
 This project is developed ``Python 3.12.4`` and has not been tested for other versions.
 
-#### Install the MH-SISE package
+### Install the MH-SISE package
 Clone repository and install `mh_sise`  in **editable** mode using:
 
 ```bash
@@ -58,7 +58,7 @@ This will install the package and allow you to modify the code without needing t
 ```python
 from mh_sise import model_utils
 ```
-#### Requirementes
+### Requirementes
 To run the code in this project, you'll need to install the following Python packages:
 
 - `numpy` for numerical operations.
@@ -73,14 +73,13 @@ Install the dependencies with:
 pip install -r requirements.txt
 ```
 
-
 # Example usage
 This example outlines the process of creatign and solving an MH-SISE problem. The following example steps through the process of defining an MH-SISE problem for a system with $m$ inputs, $n$ states, and $p$ outputs. Estimation happens on a moving horizon with length $N$.
 
 The complete example is provided in:
 - MH-SISE Example, [example.ipynb](https://github.com/Novia-RDI-Seafaring/mh-sise-py/blob/main/examples/example_cart.ipynb)
 
-### Create an optimization problem
+## Create an optimization problem
 The class `Problem` in the `mh-sise` package creates a DPP-complient optimization problem of the form
 
 $$
@@ -106,14 +105,14 @@ n = n_states
 
 problem = Problem(n, m, p, N)
 ```
-#### Add parameters
+### Add parameters
 This is how you add additional parameters beyond the ones defined in the "mother" problem above. Here parameters $b\in\mathbb{R}$ and $Q_u^{-1/2} \in \mathbb{R}^{m \times m}$ are added to the problem.
 
 ```python
 problem.add_parameter(shape=(m,m), name='Q_u_inv_sqrt')
 problem.add_parameter(shape=1, name='b')
 ```
-#### Add regularization
+### Add regularization
 Here the regularization term $L(U) = \| Q_u^{-1/2} U \|_F
 ^2$ is added to the problem.
 ```python
@@ -124,7 +123,7 @@ expression = cp.sum_squares(problem.Q_u_inv_sqrt @ problem.U)
 problem.add_regularization(expression)
 ```
 
-#### Add constraints
+### Add constraints
 This is how you add additional constraints not defined in the mother problem. Here the constraint $|U| \leq b$ is added.
 ```python
 # create a constraint
@@ -133,14 +132,14 @@ new_constraint = cp.abs(problem.U) <= problem.b
 # add constraint to problem
 problem.add_constraints(new_constraint)
 ```
-#### Add variables
+### Add variables
 It is sometimes necessary to add additional variables beyond those included in the mother problem. Variables are added as follows:
 
 ```python
 problem.add_variable(shape, name)
 ```
 
-#### Assign parameter values
+### Assign parameter values
 Parameter values are assigned as follows. It is also possible to assign values to a subset of all parameters.
 
 ```python
@@ -157,21 +156,22 @@ problem.assign_parameter_values(
 )
 ```
 
-#### Solve the problem with CVXPY
+### Solve the problem with CVXPY
 Solve the problem with `cvxpy` with the following command: 
 ```python
 problem.solve()
 ```
-### Generate a high-speed C-solver code
+
+## Generate high-speed C-solver code
 Here we will step through how to generate C code using `CVXPYGEN` for the problem above above.
 
-#### Generate C-code with CVXPYGEN
+### Generate C-code with CVXPYGEN
 ```python
 problem.generate_code(pth, name)
 ```
 where `pth` is the path to where the solved is to be saved, and `name` is the name you want to give the solver.
 
-#### Load the C-solver code in Python
+### Load the C-solver code in Python
 ```python
 from mh_sise.problem import CProblem
 from codegen.<<pth_to_solver>>.cpg_solver import cpg_solve
@@ -179,7 +179,7 @@ from codegen.<<pth_to_solver>>.cpg_solver import cpg_solve
 cproblem = CProblem(pth=pth_to_solver)
 ```
 
-#### Assign parameter values
+### Assign parameter values
 Parameter values are assigned to the  C solver as follows. It is also possible to assign values to a selection of the parameters.
 
 ```python
@@ -195,13 +195,12 @@ cproblem.assign_parameter_values(
     b = b
 )
 ```
-#### Solve the problem with the C-solver
+### Solve the problem with the C-solver
 ```python
 cproblem.solve(cpg_solve)
 ```
----
 
-## Citation
+# Citation
 
 If you use this package in your research, please cite it using the following BibTeX entry:
 
@@ -214,7 +213,7 @@ If you use this package in your research, please cite it using the following Bib
 }
 ```
 
-## Main contributors
+# Main contributors
 - **Mikael Manngård**, (Novia UAS). Contributed with the MH-SISE formulation.
     - CRediT: *Conceptualization*, *Methodology*, *Software*, *Formal analysis*, *Supervision*. 
 - **Dimitrios Bouzoulas** (Novia UAS). Contributed with the code-generation work with `cvxpygen`.
@@ -224,5 +223,5 @@ If you use this package in your research, please cite it using the following Bib
 - **Jan Kronqvist** (KTH).
     - CRediT: *Supervision*. 
 
-## Acknowledgements
+# Acknowledgements
 This work was done in the Business Finland funded project [Virtual Sea Trial](https://virtualseatrial.fi).
