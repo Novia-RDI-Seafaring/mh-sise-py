@@ -56,7 +56,7 @@ pip install -e .
 This will install the package and allow you to modify the code without needing to reinstall it. Now you can import `mh_sise` in your Python projects:
 
 ```python
-from mh_sise import problem
+from mh_sise.problem import Problem
 ```
 ### Requirementes
 To run the code in this project, you'll need to install the following Python packages:
