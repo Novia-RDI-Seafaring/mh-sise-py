@@ -1,6 +1,6 @@
-# Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)
+# MH-SISE-PY: A Moving-Horizon Simultaneous Input-and-State Estimation Python Package
 
-This repository implements a **Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)** problem using the Python packages. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon. 
+This repository implements a **Moving-Horizon Simultaneous Input-and-State Estimation** (MH-SISE) problem in Python. The MH-SISE algorithm estimates both inputs and states of a dynamic system over a moving horizon. 
 
 A [DPP-complient](https://www.cvxpy.org/tutorial/dpp/index.html) optimization problem is defined using `CVXPY`. For real-time applications, the package can generate a high-speed C-solver using `CVXPYGEN`. 
 ## Method
@@ -82,6 +82,7 @@ The complete example is provided in:
 
 ### Create an optimization problem
 The class `Problem` in the `mh-sise` package creates a DPP-complient optimization problem of the form
+
 $$
 \begin{aligned}
     &\underset{X, U, V, W}{\mathrm{minimize}} \quad L(U) + \| Q_v^{-1/2} V \|_F^2 + \| Q_w^{-1/2} W \|_F^2 \\
@@ -93,6 +94,7 @@ $$
     &U \in \mathcal{C}.
 \end{aligned}
 $$
+
 The regularization term $L(U)$ and constraints $U \in \mathcal{C}$ are to be defined by the user. The "mother" problem without regularization $L(U)$ and constraints $U \in \mathcal{C}$ is defined as:
 
 ```python
@@ -199,6 +201,19 @@ cproblem.solve(cpg_solve)
 ```
 ---
 
+## Citation
+
+If you use this package in your research, please cite it using the following BibTeX entry:
+
+```bibtex
+@misc{mh-sise-py,
+  author = {Mikael Manngård, Dimitrios Bouzoulas, Urho Hakonen, Jan Kronqvist},
+  title = {MH-SISE-PY: A Moving-horizon simultaneous input-and-state estimation Python package},
+  year = {2024},
+  howpublished = {\url{https://github.com/Novia-RDI-Seafaring/mh-sise-py}},
+}
+```
+
 ## Main contributors
 - **Mikael Manngård**, (Novia UAS). Contributed with the MH-SISE formulation.
     - CRediT: *Conceptualization*, *Methodology*, *Software*, *Formal analysis*, *Supervision*. 
@@ -210,4 +225,4 @@ cproblem.solve(cpg_solve)
     - CRediT: *Supervision*. 
 
 ## Acknowledgements
-This work was done as part of the Business Finland funded project [Virtual Sea Trial](https://virtualseatrial.fi).
+This work was done in the Business Finland funded project [Virtual Sea Trial](https://virtualseatrial.fi).
