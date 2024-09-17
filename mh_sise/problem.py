@@ -128,10 +128,10 @@ class Problem:
         
         return solution_values
 
-    def solve(self):
+    def solve(self, solver=cp.OSQP):
         # Solve the optimization problem
         t0 = time.time()
-        solution = self.problem.solve(eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True) #why faster with ignore_dpp=True?
+        solution = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True) #why faster with ignore_dpp=True?
         t1 = time.time()
         solve_time = t1 - t0
 
