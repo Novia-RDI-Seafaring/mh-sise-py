@@ -128,14 +128,15 @@ class Problem:
         
         return solution_values
 
-    def solve(self):
+    def solve(self, solver=cp.OSQP, verbose=False):
         # Solve the optimization problem
         t0 = time.time()
-        solution = self.problem.solve(eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True) #why faster with ignore_dpp=True?
+        val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True, verbose=verbose) #why faster with ignore_dpp=True?
         t1 = time.time()
 
-        print('\nCVXPY\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
-        print('Objective function value: %.6f\n' % solution)
+        #print('\nCVXPY\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
+        #print('Objective function value: %.6f\n' % val)
+        return val, t1-t0 
 
     def generate_code(self, pth, fnm):
         # compiles code with cvxgen
@@ -188,5 +189,6 @@ class CProblem:
         val = self.problem.solve(method='CPG')
         t1 = time.time()
 
-        print('\nCVXPYgen\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
-        print('Objective function value: %.6f\n' % val)
+        #print('\nCVXPYgen\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
+        #print('Objective function value: %.6f\n' % val)
+        return val, t1-t0
