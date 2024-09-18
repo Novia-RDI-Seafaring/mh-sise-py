@@ -131,7 +131,8 @@ class Problem:
     def solve(self, solver=cp.OSQP, verbose=False):
         # Solve the optimization problem
         t0 = time.time()
-        val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True, verbose=verbose) #why faster with ignore_dpp=True?
+        val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
+        #val = self.problem.solve(solver=solver, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
         t1 = time.time()
         solve_time = t1 - t0
 
@@ -139,9 +140,9 @@ class Problem:
         #print('Objective function value: %.6f\n' % val)
         return val, t1-t0
 
-    def generate_code(self, pth, fnm):
+    def generate_code(self, pth, fnm, solver='OSQP'):
         # compiles code with cvxgen
-        cpg.generate_code(self.problem, code_dir=f'{pth}{fnm}')
+        cpg.generate_code(self.problem, code_dir=f'{pth}{fnm}', solver=solver)
 
 class CProblem:
     def __init__(self, pth):
