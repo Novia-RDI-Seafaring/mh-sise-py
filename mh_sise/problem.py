@@ -187,9 +187,8 @@ class CProblem:
         # Solve the optimization problem
         self.problem.register_solve('CPG', cpg_solve)
         t0 = time.time()
-        solution = self.problem.solve(method='CPG')
+        val = self.problem.solve(method='CPG')
         t1 = time.time()
-        solve_time = t1 -t0
 
         #print('\nCVXPYgen\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
         #print('Objective function value: %.6f\n' % val)
