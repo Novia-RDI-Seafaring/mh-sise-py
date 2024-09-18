@@ -14,14 +14,14 @@ class Problem:
 
         # initialize regularization
         self.L = 0
-        
+
         # Define parameters, variables, objective, and constraints
         self.create_parameters()
         self.create_variables()
         self.create_objective()
         self.create_constraints()
         self.create_problem()
-    
+
     def create_parameters(self):
         '''Creates the parameters'''
         # Define the parameters
@@ -46,9 +46,9 @@ class Problem:
         self.y = cp.Parameter((self.p, self.HORIZON_LENGTH), name='y')
         self.x0 = cp.Parameter(self.n, name='x0')
         self.u0 = cp.Parameter(self.n, name='u0')
-        
-        
-   
+
+
+
     def create_variables(self):
         '''Creates the variables'''
         # Define the variables
@@ -80,7 +80,7 @@ class Problem:
         self.L = expression
         # update objective function
         self.create_objective()
-    
+
     def add_constraints(self, new_constraints):
         """Add additional constraints to the problem."""
         if isinstance(new_constraints, list):
@@ -89,16 +89,16 @@ class Problem:
         else:
             # Otherwise, append a single constraint
             self.constraints.append(new_constraints)
-        
+
         # Recreate the problem with the updated constraints
         self.create_problem()
-    
+
     def add_parameter(self, name, shape):
         """Add additional parameter to the problem."""
         new_par = cp.Parameter(shape, name=name)
         # Add the new parameter as an attribute of the class
         setattr(self, name, new_par)
-    
+
     def add_variable(self, name, shape):
         """Add additional parameter to the problem."""
         new_var = cp.Parameter(shape, name=name)
@@ -117,15 +117,15 @@ class Problem:
                 getattr(self, param_name).value = param_value
             else:
                 raise AttributeError(f"Parameter '{param_name}' does not exist in the Problem class.")
-    
+
     def get_variable_values(self):
         # Retrieve the values of all decision variables in the problem's variable dictionary
         solution_values = {}
-        
+
         # Loop through the variable dictionary and get values
         for var_name, var in self.problem.var_dict.items():
             solution_values[var_name] = var.value
-        
+
         return solution_values
 
     def solve(self, solver=cp.OSQP, verbose=False):
@@ -133,10 +133,11 @@ class Problem:
         t0 = time.time()
         val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=True, verbose=verbose) #why faster with ignore_dpp=True?
         t1 = time.time()
+        solve_time = t1 - t0
 
         #print('\nCVXPY\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
         #print('Objective function value: %.6f\n' % val)
-        return val, t1-t0 
+        return val, t1-t0
 
     def generate_code(self, pth, fnm):
         # compiles code with cvxgen
@@ -153,7 +154,7 @@ class CProblem:
             self.problem = pickle.load(f)
         print(f'Problem loaded from path: {self.pth + 'problem.pickle'}')
 
-    def assign_parameter_values(self, **kwargs):       
+    def assign_parameter_values(self, **kwargs):
         # Loop through the keyword arguments and set values for matching parameters
         for param_name, param_value in kwargs.items():
             if param_name in self.problem.param_dict:
@@ -161,33 +162,34 @@ class CProblem:
                 param.value = param_value
             else:
                 raise AttributeError(f"Parameter '{param_name}' does not exist in the Problem's parameter dictionary.")
-            
+
     def get_parameter_values(self):
         # Retrieve the values of all parameters in the problem's parameter dictionary
         param_values = {}
-        
+
         # Loop through the parameter dictionary and get values
         for param_name, param in self.problem.param_dict.items():
             param_values[param_name] = param.value
-        
+
         return param_values
-    
+
     def get_variable_values(self):
         # Retrieve the values of all variables in the problem's variable dictionary
         variable_values = {}
-        
+
         # Loop through the variable dictionary and get values
         for var_name, var in self.problem.var_dict.items():
             variable_values[var_name] = var.value
-        
+
         return variable_values
-    
+
     def solve(self, cpg_solve):
         # Solve the optimization problem
         self.problem.register_solve('CPG', cpg_solve)
         t0 = time.time()
-        val = self.problem.solve(method='CPG')
+        solution = self.problem.solve(method='CPG')
         t1 = time.time()
+        solve_time = t1 -t0
 
         #print('\nCVXPYgen\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
         #print('Objective function value: %.6f\n' % val)
