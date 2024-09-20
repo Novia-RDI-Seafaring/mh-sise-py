@@ -101,7 +101,7 @@ class Problem:
 
     def add_variable(self, name, shape):
         """Add additional parameter to the problem."""
-        new_var = cp.Parameter(shape, name=name)
+        new_var = cp.Variable(shape, name=name)
         # Add the new variable as an attribute of the class
         setattr(self, name, new_var)
 
