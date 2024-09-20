@@ -131,8 +131,19 @@ class Problem:
     def solve(self, solver=cp.OSQP, verbose=False):
         # Solve the optimization problem
         t0 = time.time()
+<<<<<<< Updated upstream
         val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
         #val = self.problem.solve(solver=solver, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
+=======
+        solution = self.problem.solve(
+            solver=solver, eps_abs=1e-3,
+            eps_rel=1e-3,
+            max_iter=4000,
+            polish=False,
+            ignore_dpp=True,
+            verbose=verbose
+            ) #why faster with ignore_dpp=True?
+>>>>>>> Stashed changes
         t1 = time.time()
         solve_time = t1 - t0
 
