@@ -9,12 +9,12 @@ extern "C" {
 
 // QDLDL integer and float types
 
-typedef long long    QDLDL_int;   /* for indices */
+typedef int    QDLDL_int;   /* for indices */
 typedef double  QDLDL_float; /* for numerical values  */
 typedef unsigned char   QDLDL_bool;  /* for boolean values  */
 
 //Maximum value of the signed type QDLDL_int.
-#define QDLDL_INT_MAX 
+#define QDLDL_INT_MAX INT_MAX
 
 # ifdef __cplusplus
 }

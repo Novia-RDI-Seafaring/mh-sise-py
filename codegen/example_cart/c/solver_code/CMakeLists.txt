@@ -141,11 +141,3 @@ add_library (emosqpstatic STATIC ${osqp_src} ${osqp_headers})
 # Create example executable
 add_executable (example ${PROJECT_SOURCE_DIR}/src/example.c)
 target_link_libraries (example emosqpstatic)
-
-set(solver_head
-  ${osqp_headers}
-  PARENT_SCOPE)
-
-set(solver_src
-  ${osqp_src}
-  PARENT_SCOPE)

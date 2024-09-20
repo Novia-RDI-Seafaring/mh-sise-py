@@ -128,28 +128,23 @@ class Problem:
 
         return solution_values
 
-    def solve(self, solver=cp.OSQP, verbose=False):
+    def solve(self, **solver_options):
+        # Set default options if not provided
+        solver_options.setdefault('eps_abs', 1e-3)
+        solver_options.setdefault('eps_rel', 1e-3)
+        solver_options.setdefault('max_iter', 4000)
+        solver_options.setdefault('polish', False)
+        solver_options.setdefault('ignore_dpp', True)
+        solver_options.setdefault('solver', cp.OSQP)
+        solver_options.setdefault('verbose', False)
+
         # Solve the optimization problem
         t0 = time.time()
-<<<<<<< Updated upstream
-        val = self.problem.solve(solver=solver, eps_abs=1e-3, eps_rel=1e-3, max_iter=4000, polish=False, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
-        #val = self.problem.solve(solver=solver, ignore_dpp=False, verbose=verbose) #why faster with ignore_dpp=True?
-=======
-        solution = self.problem.solve(
-            solver=solver, eps_abs=1e-3,
-            eps_rel=1e-3,
-            max_iter=4000,
-            polish=False,
-            ignore_dpp=True,
-            verbose=verbose
-            ) #why faster with ignore_dpp=True?
->>>>>>> Stashed changes
+        val = self.problem.solve(**solver_options)
         t1 = time.time()
         solve_time = t1 - t0
 
-        #print('\nCVXPY\nSolve time: %.3f ms' % (1000 * (t1 - t0)))
-        #print('Objective function value: %.6f\n' % val)
-        return val, t1-t0
+        return val, solve_time
 
     def generate_code(self, pth, fnm, solver='OSQP'):
         # compiles code with cvxgen
