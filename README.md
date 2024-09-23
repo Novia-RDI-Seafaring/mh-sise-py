@@ -23,7 +23,7 @@ Where:
 
 To estimate both the states $x_k$ and the inputs $u_k$ over a moving horizon of length $N$, the package solves the following quadratic constrainted (QP) optimization problem:
 
-$$
+$`
 \begin{aligned}
     &\underset{x, u}{\mathrm{minimize}} \quad L(u) + \sum_{n=k-N}^{k} v_n^T Q_v^{-1} v_n + \sum_{n=k-N}^{k} w_n^T Q_w^{-1} w_n \\
     &\text{subject to} \\
@@ -32,7 +32,7 @@ $$
     &x_0 = \hat{x}_{k-N-1|k-N-1} \\
     &u \in \mathcal{C},
 \end{aligned}
-$$
+`$
 
 where:
 - $Q_v \in \mathbb{R}^{p \times p}$, $Q_w \in \mathbb{R}^{n \times n}$ are covariande matrices of measurement noise $v_n$, process noise $w_n$, respectively.
@@ -82,7 +82,7 @@ The complete example is provided in:
 ## Create an optimization problem
 The class `Problem` in the `mh-sise` package creates a DPP-complient optimization problem of the form
 
-$$
+$`
 \begin{aligned}
     &\underset{X, U, V, W}{\mathrm{minimize}} \quad L(U) + \| Q_v^{-1/2} V \|_F^2 + \| Q_w^{-1/2} W \|_F^2 \\
     &\text{subject to} \\
@@ -92,7 +92,7 @@ $$
     &W_{:,0} = X_{:,0} - \hat{x}_0 \\
     &U \in \mathcal{C}.
 \end{aligned}
-$$
+`$
 
 The regularization term $L(U)$ and constraints $U \in \mathcal{C}$ are to be defined by the user. The "mother" problem without regularization $L(U)$ and constraints $U \in \mathcal{C}$ is defined as:
 
@@ -113,8 +113,8 @@ problem.add_parameter(shape=(m,m), name='Q_u_inv_sqrt')
 problem.add_parameter(shape=1, name='b')
 ```
 ### Add regularization
-Here the regularization term $L(U) = \| Q_u^{-1/2} U \|_F
-^2$ is added to the problem.
+Here the regularization term $`L(U) = \| Q_u^{-1/2} U \|_F
+^2`$ is added to the problem.
 ```python
 import cvxpy as cp
 
