@@ -1,24 +1,23 @@
-name: Test Notion Sync Action
+name: Sync README to Notion
 
 on:
-  workflow_dispatch: # Allows manual triggering of the workflow
   push:
     branches:
       - main
     paths:
-      - 'README.md' # Specify the path to the README file
+      - 'README.md'
 
 jobs:
-  sync:
+  sync_readme:
     runs-on: ubuntu-latest
-    name: Test Sync README to Notion
+    name: Sync README to Notion
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Notion Sync Action
-        uses: ./ # Use the local action in the current repository
+      - name: Sync README to Notion
+        uses: Novia-RDI-Seafaring/notion-sync-action@main
         with:
           notion_token: ${{ secrets.NOTION_TOKEN }}
           notion_page_id: ${{ secrets.NOTION_PAGE_ID }}
-          repo_description: This repository implements a Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE) problem in Python.
+          repo_description: Moving-Horizon Simultaneous Input-and-State Estimation (MH-SISE)
